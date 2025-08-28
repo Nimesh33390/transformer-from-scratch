@@ -142,7 +142,7 @@ def get_ds(config):
     # It only has the train split, so we divide it overselves
     ds_raw = load_dataset(f"{config['datasource']}", f"{config['lang_src']}-{config['lang_tgt']}", split='train')
     #added this for doing training 100 sentence pair only
-    ds_raw = ds_raw.select(range(100))
+    ds_raw = ds_raw.select(range(25000))
 
     # Build tokenizers
     tokenizer_src = get_or_build_tokenizer(config, ds_raw, config['lang_src'])
@@ -274,4 +274,5 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     config = get_config()
     train_model(config)
+
 
