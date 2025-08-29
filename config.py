@@ -32,37 +32,73 @@
 #     weights_files.sort()
 #     return str(weights_files[-1])
 
+# from pathlib import Path
+
+# def get_config():
+#     return {
+#         "batch_size": 64,
+#         "num_epochs": 20,
+#         "lr": 10**-4,
+#         "seq_len": 128,
+#         "d_model": 512,
+#         "datasource": 'cfilt/iitb-english-hindi',
+#         "lang_src": "en",
+#         "lang_tgt": "hi",
+#         "model_folder": "weights",
+#         "model_basename": "tmodel_",
+#         "preload": "latest",
+#         "tokenizer_file": "tokenizer_{0}.json",
+#         "experiment_name": "runs/tmodel"
+#     }
+
+# def get_weights_file_path(config, epoch: str):
+#     # Use the model_folder path directly
+#     model_folder = config['model_folder']
+#     model_filename = f"{config['model_basename']}{epoch}.pt"
+#     return str(Path('.') / model_folder / model_filename)
+
+# # Find the latest weights file in the weights folder
+# def latest_weights_file_path(config):
+#     # Use the model_folder path directly
+#     model_folder = config['model_folder']
+#     model_filename = f"{config['model_basename']}*"
+#     weights_files = list(Path(model_folder).glob(model_filename))
+#     if len(weights_files) == 0:
+#         return None
+#     weights_files.sort()
+#     return str(weights_files[-1])
+
 from pathlib import Path
 
 def get_config():
     return {
         "batch_size": 64,
-        "num_epochs": 20,
+        "num_epochs": 50,  # Or however many total epochs you want to run
         "lr": 10**-4,
         "seq_len": 128,
         "d_model": 512,
         "datasource": 'cfilt/iitb-english-hindi',
         "lang_src": "en",
         "lang_tgt": "hi",
-        "model_folder": "weights",
+        # --- Directly set your Google Drive paths here ---
+        "model_folder": "/content/drive/MyDrive/translation_Models/pytorch-transformer/weights",
         "model_basename": "tmodel_",
-        "preload": "latest",
-        "tokenizer_file": "tokenizer_{0}.json",
+        "preload": "latest",  # This tells the script to resume
+        "tokenizer_file": "/content/drive/MyDrive/translation_Models/pytorch-transformer/vocab/tokenizer_{0}.json",
         "experiment_name": "runs/tmodel"
     }
 
 def get_weights_file_path(config, epoch: str):
-    # Use the model_folder path directly
-    model_folder = config['model_folder']
+    # Use the absolute path directly from the config
+    model_folder = Path(config['model_folder'])
     model_filename = f"{config['model_basename']}{epoch}.pt"
-    return str(Path('.') / model_folder / model_filename)
+    return str(model_folder / model_filename)
 
-# Find the latest weights file in the weights folder
 def latest_weights_file_path(config):
-    # Use the model_folder path directly
-    model_folder = config['model_folder']
+    # Use the absolute path directly from the config
+    model_folder = Path(config['model_folder'])
     model_filename = f"{config['model_basename']}*"
-    weights_files = list(Path(model_folder).glob(model_filename))
+    weights_files = list(model_folder.glob(model_filename))
     if len(weights_files) == 0:
         return None
     weights_files.sort()
